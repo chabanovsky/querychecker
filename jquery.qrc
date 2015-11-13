@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>jquery.min.js</file>
+        <file>stats.json</file>
+    </qresource>
+</RCC>
