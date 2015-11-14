@@ -53,10 +53,10 @@ QString NewQuestionTestCase::DumpResults() {
     QString dump;
     for (int index = 0; index < questionsToSerch.length(); ++ index) {
         Question & q = questionsToSerch[index];
-        dump += QString("Result: text = ")
+        dump += QString("Exist in Yandex: ")
+             + QString(q.ExistOnFirstPage ? "yes" : "no")
+             + QString(", title: ")
              + q.Text
-             + QString(", Doe exist in Yandex: ")
-             + q.ExistOnFirstPage
 //             + QString(", url = ")
 //             + q.Link
              + QString("\n");
