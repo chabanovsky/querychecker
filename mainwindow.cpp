@@ -111,14 +111,26 @@ void MainWindow::finishLoading(bool) {
 
 void MainWindow::runSearchQueryTest() {
     if (testCase)
-        delete testCase;
-    testCase = new SearchQueryTestCase(view);
+        return;
+    SearchQueryTestCase * tcase = new SearchQueryTestCase(view);
+    connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
+    testCase = tcase;
     testCase->Execute();
 }
 
 void MainWindow::runNewQuestionTest() {
     if (testCase)
-        delete testCase;
-    testCase = new NewQuestionTestCase(view);
+        return;
+    NewQuestionTestCase * tcase = new NewQuestionTestCase(view);
+    connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
+    testCase = tcase;
     testCase->Execute();
+}
+
+void MainWindow::onTestCompeted() {
+    if (!testCase)
+        return;
+    testCase->DumpResults();
+    delete testCase;
+    testCase = NULL;
 }

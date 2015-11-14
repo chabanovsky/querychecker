@@ -72,7 +72,6 @@ void NewQuestionTestCase::finishLoading(bool) {
 
 void NewQuestionTestCase::onTestSuiteFinished() {
     emit TestSuiteFinished();
-    DumpResults();
 }
 
 void NewQuestionTestCase::onResultFoundCallback(const QVariant& returnValue) {

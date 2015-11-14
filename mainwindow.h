@@ -64,6 +64,7 @@ protected slots:
     void viewSource();
     void runSearchQueryTest();
     void runNewQuestionTest();
+    void onTestCompeted();
 
 private:
     QWebEngineView *view;

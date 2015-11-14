@@ -107,6 +107,5 @@ void SearchQueryTestCase::finishLoading(bool) {
 void SearchQueryTestCase::onTestSuiteFinished() {
     disconnect(view, SIGNAL(loadFinished(bool)));
     emit TestSuiteFinished();
-    DumpResults();
 }
 
