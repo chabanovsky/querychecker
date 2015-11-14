@@ -48,11 +48,8 @@ class QWebEngineView;
 class QLineEdit;
 QT_END_NAMESPACE
 
-//! [1]
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     MainWindow();
     QWebEngineView * WebEngineView();
@@ -65,6 +62,8 @@ protected slots:
     void finishLoading(bool);
 
     void viewSource();
+    void runSearchQueryTest();
+    void runNewQuestionTest();
 
 private:
     QWebEngineView *view;

@@ -137,7 +137,7 @@ QUrl NewQuestionTestCase::onResultFoundStackOverflow(const QVariant& returnValue
 
 NewQuestionTestCase::Question &NewQuestionTestCase::question() {
     if (currentQuestionIndex < 0 || currentQuestionIndex > questionsToSerch.count()) {
-        throw std::invalid_argument("Invalid query index");
+        throw std::invalid_argument("Invalid question index");
     }
     return questionsToSerch[currentQuestionIndex];
 }

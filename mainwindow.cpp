@@ -49,6 +49,7 @@
 MainWindow::MainWindow() {
     progress = 0;
     view = new QWebEngineView(this);
+    testCase = NULL;
 
     connect(view, SIGNAL(loadFinished(bool)), SLOT(adjustLocation()));
     connect(view, SIGNAL(titleChanged(QString)), SLOT(adjustTitle()));
@@ -60,16 +61,10 @@ MainWindow::MainWindow() {
     connect(locationEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
 
     QToolBar *toolBar = addToolBar(tr("Navigation"));
-    toolBar->addAction(view->pageAction(QWebEnginePage::Back));
-    toolBar->addAction(view->pageAction(QWebEnginePage::Forward));
-    toolBar->addAction(view->pageAction(QWebEnginePage::Reload));
-    toolBar->addAction(view->pageAction(QWebEnginePage::Stop));
+    toolBar->addAction(tr("Run SQ Test"), this, SLOT(runSearchQueryTest()));
+    toolBar->addAction(tr("Run NQ Test"), this, SLOT(runNewQuestionTest()));
     toolBar->addWidget(locationEdit);
-
     setCentralWidget(view);
-    testCase = new NewQuestionTestCase(view);
-
-    testCase->Execute();
 }
 
 
@@ -112,4 +107,18 @@ void MainWindow::setProgress(int p) {
 void MainWindow::finishLoading(bool) {
     progress = 100;
     adjustTitle();
+}
+
+void MainWindow::runSearchQueryTest() {
+    if (testCase)
+        delete testCase;
+    testCase = new SearchQueryTestCase(view);
+    testCase->Execute();
+}
+
+void MainWindow::runNewQuestionTest() {
+    if (testCase)
+        delete testCase;
+    testCase = new NewQuestionTestCase(view);
+    testCase->Execute();
 }
