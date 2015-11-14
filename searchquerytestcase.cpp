@@ -60,7 +60,7 @@ QString SearchQueryTestCase::DumpResults() {
     QString dump;
     for (int index = 0; index < searchQueries.count(); ++index) {
         SearchQuery & query = searchQueries[index];
-        dump += QString("Runk in Google: ")
+        dump += QString("Query # ")
              + QString::number(query.GoogleRank())
              + QString(", runk in yandex: ")
              + QString::number(query.YandexRank())
