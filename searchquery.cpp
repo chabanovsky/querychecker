@@ -42,4 +42,8 @@ void SearchQuery::SetMaxPageNum(int maxPageNum) {
     MAX_PAGE_NUM = maxPageNum;
 }
 
+int SearchQuery::MaxPageNum() {
+    return MAX_PAGE_NUM;
+}
+
 

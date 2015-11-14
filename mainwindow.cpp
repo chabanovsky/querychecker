@@ -42,37 +42,11 @@
 #include <QtWebEngineWidgets>
 #include <QDebug>
 #include "mainwindow.h"
-#include "parser.h"
+#include "utils.h"
+#include "searchquerytestcase.h"
 
-template<typename Arg, typename R, typename C>
-struct InvokeWrapper {
-    R *receiver;
-    void (C::*memberFun)(Arg);
-    void operator()(Arg result) {
-        (receiver->*memberFun)(result);
-    }
-};
-
-template<typename Arg, typename R, typename C>
-InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg)) {
-    InvokeWrapper<Arg, R, C> wrapper = {receiver, memberFun};
-    return wrapper;
-}
-
-int MainWindow::pageLimit = 10;
-
-MainWindow::MainWindow(const QUrl& url) {
+MainWindow::MainWindow() {
     progress = 0;
-    requestUrl = url;
-    currentPage = 0;
-    currentQueryIndex = -1;
-    QFile file;
-    file.setFileName(":/jquery.min.js");
-    file.open(QIODevice::ReadOnly);
-    jQuery = file.readAll();
-    jQuery.append("\nvar qt = { 'jQuery': jQuery.noConflict(true) };");
-    file.close();
-
     view = new QWebEngineView(this);
 
     connect(view, SIGNAL(loadFinished(bool)), SLOT(adjustLocation()));
@@ -92,11 +66,14 @@ MainWindow::MainWindow(const QUrl& url) {
     toolBar->addWidget(locationEdit);
 
     setCentralWidget(view);
+    testCase = new SearchQueryTestCase(view);
 
-    Parser parser(":/stats.json");
-    searchQueries = parser.Parse();
+    testCase->Execute();
+}
 
-    runNextQuery();
+
+QWebEngineView * MainWindow::WebEngineView() {
+    return view;
 }
 
 void MainWindow::viewSource() {
@@ -111,26 +88,6 @@ void MainWindow::viewSource() {
 
 void MainWindow::adjustLocation() {
     locationEdit->setText(view->url().toString());
-}
-
-void MainWindow::runNextQuery() {
-    currentPage = 0;
-    ++currentQueryIndex;
-    if (currentQueryIndex >= searchQueries.count()) {
-        dumpResults();
-        return;
-    }
-
-    SearchQuery & nextQuery = searchQueries[currentQueryIndex];
-    view->load(QUrl(requestUrl.toString() +nextQuery.EncodingQuery()));
-}
-
-void MainWindow::dumpResults() {
-    for (int index = 0; index < searchQueries.count(); ++index) {
-        SearchQuery & query = searchQueries[index];
-        qDebug() << "Query: " << query.Query() << ", in google: " << query.GoogleRank() << ", in yandex: " << query.YandexRank();
-    }
-    QApplication::quit();
 }
 
 void MainWindow::changeLocation() {
@@ -154,49 +111,4 @@ void MainWindow::setProgress(int p) {
 void MainWindow::finishLoading(bool) {
     progress = 100;
     adjustTitle();
-    view->page()->runJavaScript(jQuery);
-    QString code = " \
-function findUrl(){ \
-    var search_url = 'ru.stackoverflow.com'; \
-    var results = $('.serp-item'); \
-    for (var index = 0; index < results.length; index++) { \
-        var item = results[index]; \
-        var anchor = $(item).find('.serp-url__link'); \
-        var link = $(anchor).attr('href'); \
-        if (link == undefined) { \
-            continue; \
-        } \
-        if (link.indexOf(search_url) > 1){ \
-            return parseInt($(item).attr('aria-posinset')); \
-        } \
-        return -1; \
-    } \
-}; findUrl();";
-    view->page()->runJavaScript(code, invoke(this, &MainWindow::onResultFoundCallback));
-}
-
-void MainWindow::onResultFoundCallback(const QVariant& returnValue) {
-    int result = -1;
-    bool isOk = false;
-
-    result = returnValue.toInt(&isOk);
-
-    if (!isOk) {
-        runNextQuery();
-        return;
-    }
-    if (result > -1) {
-        SearchQuery & query = searchQueries[currentQueryIndex];
-        query.SetYandexRank(result);
-        runNextQuery();
-        return;
-    }
-    ++currentPage;
-    if (currentPage >= MainWindow::pageLimit) {
-        runNextQuery();
-        return;
-    }
-    SearchQuery & query = searchQueries[currentQueryIndex];
-    QUrl url = QUrl(requestUrl.toString() + query.EncodingQuery() + "&p=" + QString::number(currentPage));
-    view->load(url);
 }

@@ -16,6 +16,7 @@ public:
 
 public:
     static void SetMaxPageNum(int maxPageNum);
+    static int MaxPageNum();
 
 private:
     QString query;

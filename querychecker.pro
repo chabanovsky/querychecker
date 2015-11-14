@@ -4,11 +4,18 @@ macx: CONFIG -= app_bundle
 
 HEADERS =   mainwindow.h \
     searchquery.h \
-    parser.h
+    parser.h \
+    testcase.h \
+    searchquerytestcase.h \
+    utils.h \
+    jquery.h
 SOURCES =   main.cpp \
             mainwindow.cpp \
     searchquery.cpp \
-    parser.cpp
+    parser.cpp \
+    testcase.cpp \
+    searchquerytestcase.cpp \
+    jquery.cpp
 RESOURCES = jquery.qrc
 
 # install

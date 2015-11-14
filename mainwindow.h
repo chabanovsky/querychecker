@@ -41,7 +41,7 @@
 #include <QtWidgets>
 #include <QList>
 
-#include "searchquery.h"
+#include "testcase.h"
 
 QT_BEGIN_NAMESPACE
 class QWebEngineView;
@@ -54,12 +54,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(const QUrl& url);
-    void onResultFoundCallback(const QVariant& returnValue);
-
+    MainWindow();
+    QWebEngineView * WebEngineView();
 
 protected slots:
-
     void adjustLocation();
     void changeLocation();
     void adjustTitle();
@@ -69,23 +67,11 @@ protected slots:
     void viewSource();
 
 private:
-    void runNextQuery();
-    void dumpResults();
-
-private:
-    QString jQuery;
     QWebEngineView *view;
     QLineEdit *locationEdit;
     QAction *rotateAction;
     int progress;
-    QUrl requestUrl;
-    int currentPage;
-    int currentQueryIndex;
-    QList<SearchQuery> searchQueries;
-
-private:
-    static int pageLimit;
-//! [1]
+    TestCase * testCase;
 };
 
 

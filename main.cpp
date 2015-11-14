@@ -45,14 +45,7 @@
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
-
-    QUrl url;
-    if (argc > 1)
-        url = QUrl::fromUserInput(argv[1]);
-    else
-        url = QUrl("https://yandex.ru/search/?lr=2&text=");
-
-    MainWindow *browser = new MainWindow(url);
+    MainWindow *browser = new MainWindow();
     browser->show();
     return app.exec();
 }
