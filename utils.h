@@ -46,8 +46,8 @@ const QString QUESTION_LIST_JS = " \
         } \
         return result; \
     }; questionsList();";
-const int QUESTION_TO_SEARCH_LIMIT = 15; // 500;
-const int DEFAULT_MAX_PAGE_NUM = 3;
+const int QUESTION_TO_SEARCH_LIMIT = 200; // Read 200 newest questions on Stack Overflow in Russia
+const int DEFAULT_MAX_PAGE_NUM = 3; // How many pages with search results on yandex.ru we shold check for a question
 
 #endif // UTILS
 
