@@ -49,11 +49,19 @@ bool NewQuestionTestCase::Cancel() {
     return false;
 }
 
-void NewQuestionTestCase::DumpResults() {
+QString NewQuestionTestCase::DumpResults() {
+    QString dump;
     for (int index = 0; index < questionsToSerch.length(); ++ index) {
         Question & q = questionsToSerch[index];
-        qDebug() << "Result: link = " << q.Link << ", text = " << q.Text << ", Doe exist in Yandex: " << q.ExistOnFirstPage;
+        dump += QString("Result: text = ")
+             + q.Text
+             + QString(", Doe exist in Yandex: ")
+             + q.ExistOnFirstPage
+//             + QString(", url = ")
+//             + q.Link
+             + QString("\n");
     }
+    return dump;
 }
 
 void NewQuestionTestCase::finishLoading(bool) {

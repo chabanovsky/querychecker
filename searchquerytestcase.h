@@ -27,7 +27,7 @@ public:
     virtual void Execute();
     virtual bool CanExecute();
     virtual bool Cancel();
-    virtual void DumpResults();
+    virtual QString DumpResults();
 
 signals:
     void TestSuiteFinished();

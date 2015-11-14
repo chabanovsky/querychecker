@@ -130,7 +130,14 @@ void MainWindow::runNewQuestionTest() {
 void MainWindow::onTestCompeted() {
     if (!testCase)
         return;
-    testCase->DumpResults();
+    QString dump = testCase->DumpResults();
+    QTextEdit* textEdit = new QTextEdit(NULL);
+    textEdit->setAttribute(Qt::WA_DeleteOnClose);
+    textEdit->show();
+    textEdit->setPlainText(dump);
+    textEdit->setBaseSize(900, 600);
+
     delete testCase;
     testCase = NULL;
+    view->load(QUrl("about:blank"));
 }

@@ -56,11 +56,19 @@ SearchQuery& SearchQueryTestCase::query() {
     return searchQueries[currentQueryIndex];
 }
 
-void SearchQueryTestCase::DumpResults() {
+QString SearchQueryTestCase::DumpResults() {
+    QString dump;
     for (int index = 0; index < searchQueries.count(); ++index) {
         SearchQuery & query = searchQueries[index];
-        qDebug() << "Query: " << query.Query() << ", in google: " << query.GoogleRank() << ", in yandex: " << query.YandexRank();
+        dump += QString("Query: ")
+             + query.Query()
+             + QString(", in google: ")
+             + QString::number(query.GoogleRank())
+             + QString(", in yandex: ")
+             + QString::number(query.YandexRank())
+             + QString("\n");
     }
+    return dump;
 }
 
 void SearchQueryTestCase::runNextQuery() {
