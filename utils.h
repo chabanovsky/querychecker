@@ -47,6 +47,7 @@ const QString QUESTION_LIST_JS = " \
         return result; \
     }; questionsList();";
 const int QUESTION_TO_SEARCH_LIMIT = 15; // 500;
+const int DEFAULT_MAX_PAGE_NUM = 3;
 
 #endif // UTILS
 

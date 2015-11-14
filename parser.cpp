@@ -4,10 +4,29 @@ Parser::Parser(const QString & name) : filename(name) {
 }
 
 QList<SearchQuery> Parser::Parse() {
-    QList<SearchQuery> test;
-    test.append(SearchQuery(QString("Билд Natron под Windows"), 1));
-    test.append(SearchQuery(QString("Stack Overflow на русском"), 1));
-    return test;
+    QList<SearchQuery> searchQueries;
+    readFile();
+
+    QJsonDocument document = QJsonDocument::fromJson(content.toUtf8());
+    QJsonObject obj =  document.object();
+    QJsonValue val = obj.value("data");
+    QJsonArray array = val.toArray();
+    for (int index = 0; index < array.count(); ++index) {
+        QJsonValue item = array.at(index);
+        QJsonObject query = item.toObject();
+        QJsonValue queryPhrase = query.value("phrase");
+        searchQueries.append(SearchQuery(QString(queryPhrase.toString()), index));
+    }
+
+    return searchQueries;
+}
+
+void Parser::readFile() {
+    QFile file;
+    file.setFileName(filename);
+    file.open(QIODevice::ReadOnly);
+    content = file.readAll();
+    file.close();
 }
 
 

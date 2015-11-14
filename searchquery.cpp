@@ -1,8 +1,5 @@
 #include "searchquery.h"
-
-namespace  {
-static const int DEFAULT_MAX_PAGE_NUM = 10;
-}
+#include "utils.h"
 
 int SearchQuery::MAX_PAGE_NUM = DEFAULT_MAX_PAGE_NUM;
 
