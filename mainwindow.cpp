@@ -44,6 +44,7 @@
 #include "mainwindow.h"
 #include "utils.h"
 #include "searchquerytestcase.h"
+#include "newquestiontestcase.h"
 
 MainWindow::MainWindow() {
     progress = 0;
@@ -66,7 +67,7 @@ MainWindow::MainWindow() {
     toolBar->addWidget(locationEdit);
 
     setCentralWidget(view);
-    testCase = new SearchQueryTestCase(view);
+    testCase = new NewQuestionTestCase(view);
 
     testCase->Execute();
 }

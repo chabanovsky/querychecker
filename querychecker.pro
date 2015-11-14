@@ -8,14 +8,16 @@ HEADERS =   mainwindow.h \
     testcase.h \
     searchquerytestcase.h \
     utils.h \
-    jquery.h
+    jquery.h \
+    newquestiontestcase.h
 SOURCES =   main.cpp \
             mainwindow.cpp \
     searchquery.cpp \
     parser.cpp \
     testcase.cpp \
     searchquerytestcase.cpp \
-    jquery.cpp
+    jquery.cpp \
+    newquestiontestcase.cpp
 RESOURCES = jquery.qrc
 
 # install

@@ -16,7 +16,7 @@ QT_END_NAMESPACE
 #include "utils.h"
 
 class SearchQueryTestCase : public QObject, public TestCase {
-Q_OBJECT
+    Q_OBJECT
 public:
     SearchQueryTestCase(QWebEngineView * initView);
     virtual ~SearchQueryTestCase();

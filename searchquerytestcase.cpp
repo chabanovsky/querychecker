@@ -6,31 +6,10 @@
 #include "searchquerytestcase.h"
 #include "jquery.h"
 
-namespace {
-const QString DEFAULT_SEARCH_URL = "https://yandex.ru/search/?lr=2&text=";
-const QString FIND_SORU_IN_YA_JS = " \
-        function findUrl(){ \
-            var search_url = 'ru.stackoverflow.com'; \
-            var results = $('.serp-item'); \
-            for (var index = 0; index < results.length; index++) { \
-                var item = results[index]; \
-                var anchor = $(item).find('.serp-url__link'); \
-                var link = $(anchor).attr('href'); \
-                if (link == undefined) { \
-                    continue; \
-                } \
-                if (link.indexOf(search_url) > 1){ \
-                    return parseInt($(item).attr('aria-posinset')); \
-                } \
-                return -1; \
-            } \
-        }; findUrl();";
-}
-
 SearchQueryTestCase::SearchQueryTestCase(QWebEngineView * initView)
     : TestCase(),
     view(initView),
-    requestUrl(DEFAULT_SEARCH_URL),
+    requestUrl(DEFAULT_YANDEX_SEARCH_URL),
     currentPage(0),
     currentQueryIndex(-1),
     searchQueries(){
@@ -126,8 +105,8 @@ void SearchQueryTestCase::finishLoading(bool) {
 }
 
 void SearchQueryTestCase::onTestSuiteFinished() {
+    disconnect(view, SIGNAL(loadFinished(bool)));
     emit TestSuiteFinished();
-
     DumpResults();
 }
 

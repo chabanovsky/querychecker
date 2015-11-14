@@ -16,5 +16,37 @@ InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg)) {
     return wrapper;
 }
 
+const QString DEFAULT_YANDEX_SEARCH_URL = "https://yandex.ru/search/?lr=2&text=";
+const QString FIND_SORU_IN_YA_JS = " \
+        function findUrl(){ \
+            var search_url = 'ru.stackoverflow.com'; \
+            var results = $('.serp-item'); \
+            for (var index = 0; index < results.length; index++) { \
+                var item = results[index]; \
+                var anchor = $(item).find('.serp-url__link'); \
+                var link = $(anchor).attr('href'); \
+                if (link == undefined) { \
+                    continue; \
+                } \
+                if (link.indexOf(search_url) > 1){ \
+                    return parseInt($(item).attr('aria-posinset')); \
+                } \
+                return -1; \
+            } \
+        }; findUrl();";
+const QString DEFAULT_SORU_QUESTION_URL = "http://ru.stackoverflow.com/questions?sort=newest";
+const QString QUESTION_LIST_JS = " \
+    function questionsList() { \
+        var result = []; \
+        var questions = $('.question-summary'); \
+        for (var index = 0; index < questions.length; index++) { \
+            var question = questions[index]; \
+            var item = {text: $(question).find('h3').text(), link: $(question).find('h3 a').attr('href')}; \
+            result.push(item); \
+        } \
+        return result; \
+    }; questionsList();";
+const int QUESTION_TO_SEARCH_LIMIT = 15; // 500;
+
 #endif // UTILS
 
