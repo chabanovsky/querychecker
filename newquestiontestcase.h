@@ -27,7 +27,8 @@ private:
     };
     enum TestState { STACKOVERFLOW, YANDEX };
 public:
-    NewQuestionTestCase (QWebEngineView * initView);
+    enum NewQuestionType { ANY, WITH_ANSWER, ANSWERED };
+    NewQuestionTestCase (QWebEngineView * initView, NewQuestionType initType);
     virtual ~NewQuestionTestCase();
     NewQuestionTestCase (NewQuestionTestCase const &);
     NewQuestionTestCase& operator=(NewQuestionTestCase const &);
@@ -50,6 +51,7 @@ private:
     QUrl onResultFoundYandex(const QVariant& returnValue);
     QUrl onResultFoundStackOverflow(const QVariant& returnValue);
     Question& question();
+    QString jsCode();
 
 private:
     QWebEngineView * view;
@@ -59,6 +61,7 @@ private:
     TestState currentState;
     QString yandexUrl;
     int currentQuestionIndex;
+    NewQuestionType questionsType;
 };
 
 #endif // NEWQUESTIONTESTCASE

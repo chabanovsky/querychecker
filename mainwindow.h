@@ -42,6 +42,7 @@
 #include <QList>
 
 #include "testcase.h"
+#include "newquestiontestcase.h"
 
 QT_BEGIN_NAMESPACE
 class QWebEngineView;
@@ -64,7 +65,10 @@ protected slots:
     void viewSource();
     void runSearchQueryTest();
     void runNewQuestionTest();
+    void runNewQuestionWithAnswerTest();
+    void runNewAnsweredQuestionTest();
     void onTestCompeted();
+    void runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType);
 
 private:
     QWebEngineView *view;

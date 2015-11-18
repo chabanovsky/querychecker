@@ -61,8 +61,10 @@ MainWindow::MainWindow() {
     connect(locationEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
 
     QToolBar *toolBar = addToolBar(tr("Navigation"));
-    toolBar->addAction(tr("Run SQ Test"), this, SLOT(runSearchQueryTest()));
-    toolBar->addAction(tr("Run NQ Test"), this, SLOT(runNewQuestionTest()));
+    toolBar->addAction(tr("Run SQ"), this, SLOT(runSearchQueryTest()));
+    toolBar->addAction(tr("Run NQ"), this, SLOT(runNewQuestionTest()));
+    toolBar->addAction(tr("Run NQWA"), this, SLOT(runNewQuestionWithAnswerTest()));
+    toolBar->addAction(tr("Run NAQ"), this, SLOT(runNewAnsweredQuestionTest()));
     toolBar->addWidget(locationEdit);
     setCentralWidget(view);
 }
@@ -118,13 +120,25 @@ void MainWindow::runSearchQueryTest() {
     testCase->Execute();
 }
 
-void MainWindow::runNewQuestionTest() {
+void MainWindow::runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType) {
     if (testCase)
         return;
-    NewQuestionTestCase * tcase = new NewQuestionTestCase(view);
+    NewQuestionTestCase * tcase = new NewQuestionTestCase(view, questionsType);
     connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
     testCase = tcase;
     testCase->Execute();
+}
+
+void MainWindow::runNewQuestionTest() {
+    runNewQuestionXHelper(NewQuestionTestCase::ANY);
+}
+
+void MainWindow::runNewQuestionWithAnswerTest() {
+    runNewQuestionXHelper(NewQuestionTestCase::WITH_ANSWER);
+}
+
+void MainWindow::runNewAnsweredQuestionTest() {
+    runNewQuestionXHelper(NewQuestionTestCase::ANSWERED);
 }
 
 void MainWindow::onTestCompeted() {

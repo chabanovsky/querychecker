@@ -7,14 +7,15 @@
 #include "jquery.h"
 #include "utils.h"
 
-NewQuestionTestCase::NewQuestionTestCase (QWebEngineView * initView)
+NewQuestionTestCase::NewQuestionTestCase (QWebEngineView * initView,NewQuestionType initType)
     : TestCase(),
     view(initView),
     soruQuestionUrl(DEFAULT_SORU_QUESTION_URL),
     currentSORUQuestionPageIndex(1),
     currentState(STACKOVERFLOW),
     yandexUrl(DEFAULT_YANDEX_SEARCH_URL),
-    currentQuestionIndex (-1) {
+    currentQuestionIndex (-1),
+    questionsType(initType) {
 
     connect(view, SIGNAL(loadFinished(bool)), SLOT(finishLoading(bool)));
 }
@@ -24,11 +25,26 @@ NewQuestionTestCase::~NewQuestionTestCase() {
 
 NewQuestionTestCase::NewQuestionTestCase (NewQuestionTestCase const & other)
     : TestCase(other),
-    view(other.view) {
+    view(other.view),
+    soruQuestionUrl(other.soruQuestionUrl),
+    currentState(other.currentState),
+    yandexUrl(other.yandexUrl),
+    currentQuestionIndex (other.currentQuestionIndex),
+    questionsType(other.questionsType) {
 }
 
 NewQuestionTestCase& NewQuestionTestCase::operator=(NewQuestionTestCase const & other)  {
+    if (&other == this) {
+        return *this;
+    }
+
     TestCase::operator =(other);
+    view = other.view;
+    soruQuestionUrl = other.soruQuestionUrl;
+    currentState = other.currentState;
+    yandexUrl = other.yandexUrl;
+    currentQuestionIndex = other.currentQuestionIndex;
+    questionsType = other.questionsType;
     return *this;
 }
 
@@ -57,8 +73,6 @@ QString NewQuestionTestCase::DumpResults() {
              + QString(q.ExistOnFirstPage ? "yes" : "no")
              + QString(", title: ")
              + q.Text
-//             + QString(", url = ")
-//             + q.Link
              + QString("\n");
     }
     return dump;
@@ -68,7 +82,7 @@ void NewQuestionTestCase::finishLoading(bool) {
     view->page()->runJavaScript(JQuery::Instance()->Code());
     switch (currentState) {
     case STACKOVERFLOW:
-        view->page()->runJavaScript(QUESTION_LIST_JS, invoke(this, &NewQuestionTestCase::onResultFoundCallback));
+        view->page()->runJavaScript(jsCode(), invoke(this, &NewQuestionTestCase::onResultFoundCallback));
         break;
     case YANDEX:
         view->page()->runJavaScript(FIND_SORU_IN_YA_JS, invoke(this, &NewQuestionTestCase::onResultFoundCallback));
@@ -147,4 +161,19 @@ NewQuestionTestCase::Question &NewQuestionTestCase::question() {
         throw std::invalid_argument("Invalid question index");
     }
     return questionsToSerch[currentQuestionIndex];
+}
+QString NewQuestionTestCase::jsCode() {
+    switch(questionsType) {
+    case ANY:
+        return QUESTION_LIST_JS;
+        break;
+    case WITH_ANSWER:
+        return QUESTION_WITH_ANSWER_LIST_JS;
+        break;
+    case ANSWERED:
+        return ANSWERED_QUESTION_LIST_JS;
+        break;
+    default:
+       throw std::invalid_argument("Invalid question type for js code");
+    }
 }

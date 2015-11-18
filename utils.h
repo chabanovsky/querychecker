@@ -46,6 +46,35 @@ const QString QUESTION_LIST_JS = " \
         } \
         return result; \
     }; questionsList();";
+const QString QUESTION_WITH_ANSWER_LIST_JS = " \
+    function questionsList() { \
+        var result = []; \
+        var questions = $('.question-summary'); \
+        for (var index = 0; index < questions.length; index++) { \
+            var question = questions[index]; \
+            var status = $(question).find('.status strong')[0]; \
+            var hasAnswers = parseInt($(status).text()) > 0; \
+            if (!hasAnswers) \
+                continue; \
+            var item = {text: $(question).find('h3').text(), link: $(question).find('h3 a').attr('href')};  \
+            result.push(item); \
+        } \
+        return result; \
+    }; questionsList();";
+const QString ANSWERED_QUESTION_LIST_JS = "\
+    function questionsList() { \
+        var result = []; \
+        var questions = $('.question-summary'); \
+        for (var index = 0; index < questions.length; index++) { \
+            var question = questions[index]; \
+            var status = $(question).find('.status')[0]; \
+            if (!$(status).hasClass('answered')) \
+                continue; \
+            var item = {text: $(question).find('h3').text(), link: $(question).find('h3 a').attr('href')}; \
+            result.push(item); \
+        } \
+        return result; \
+    }; questionsList();";
 const int QUESTION_TO_SEARCH_LIMIT = 200; // Read 200 newest questions on Stack Overflow in Russia
 const int DEFAULT_MAX_PAGE_NUM = 3; // How many pages with search results on yandex.ru we shold check for a question
 
