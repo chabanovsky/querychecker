@@ -24,11 +24,18 @@ private:
         QString Query() {
             return QUrl::toPercentEncoding(Text);
         }
+        QString LinkAsQuery(QString baseUrl) {
+            return QUrl::toPercentEncoding(baseUrl + UnquoteLink());
+        }
+        QString UnquoteLink() {
+            return QUrl::fromPercentEncoding(Link.toUtf8());
+        }
     };
     enum TestState { STACKOVERFLOW, YANDEX };
 public:
     enum NewQuestionType { ANY, WITH_ANSWER, ANSWERED };
-    NewQuestionTestCase (QWebEngineView * initView, NewQuestionType initType);
+    enum SearchQueryType { TITLE, URL };
+    NewQuestionTestCase (QWebEngineView * initView, NewQuestionType initType, SearchQueryType initSearchQueryType);
     virtual ~NewQuestionTestCase();
     NewQuestionTestCase (NewQuestionTestCase const &);
     NewQuestionTestCase& operator=(NewQuestionTestCase const &);
@@ -52,6 +59,8 @@ private:
     QUrl onResultFoundStackOverflow(const QVariant& returnValue);
     Question& question();
     QString jsCode();
+    QString yandexQueryUrl();
+    QString getDumpString(int questionIndex);
 
 private:
     QWebEngineView * view;
@@ -62,6 +71,7 @@ private:
     QString yandexUrl;
     int currentQuestionIndex;
     NewQuestionType questionsType;
+    SearchQueryType searchQueryType;
 };
 
 #endif // NEWQUESTIONTESTCASE

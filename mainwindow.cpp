@@ -65,6 +65,7 @@ MainWindow::MainWindow() {
     toolBar->addAction(tr("Run NQ"), this, SLOT(runNewQuestionTest()));
     toolBar->addAction(tr("Run NQWA"), this, SLOT(runNewQuestionWithAnswerTest()));
     toolBar->addAction(tr("Run NAQ"), this, SLOT(runNewAnsweredQuestionTest()));
+    toolBar->addAction(tr("Run NURLs"), this, SLOT(runNewUrlTest()));
     toolBar->addWidget(locationEdit);
     setCentralWidget(view);
 }
@@ -120,25 +121,29 @@ void MainWindow::runSearchQueryTest() {
     testCase->Execute();
 }
 
-void MainWindow::runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType) {
+void MainWindow::runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType, NewQuestionTestCase::SearchQueryType searchType) {
     if (testCase)
         return;
-    NewQuestionTestCase * tcase = new NewQuestionTestCase(view, questionsType);
+    NewQuestionTestCase * tcase = new NewQuestionTestCase(view, questionsType, searchType);
     connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
     testCase = tcase;
     testCase->Execute();
 }
 
 void MainWindow::runNewQuestionTest() {
-    runNewQuestionXHelper(NewQuestionTestCase::ANY);
+    runNewQuestionXHelper(NewQuestionTestCase::ANY, NewQuestionTestCase::TITLE);
 }
 
 void MainWindow::runNewQuestionWithAnswerTest() {
-    runNewQuestionXHelper(NewQuestionTestCase::WITH_ANSWER);
+    runNewQuestionXHelper(NewQuestionTestCase::WITH_ANSWER, NewQuestionTestCase::TITLE);
 }
 
 void MainWindow::runNewAnsweredQuestionTest() {
-    runNewQuestionXHelper(NewQuestionTestCase::ANSWERED);
+    runNewQuestionXHelper(NewQuestionTestCase::ANSWERED, NewQuestionTestCase::TITLE);
+}
+
+void MainWindow::runNewUrlTest() {
+    runNewQuestionXHelper(NewQuestionTestCase::WITH_ANSWER, NewQuestionTestCase::URL);
 }
 
 void MainWindow::onTestCompeted() {

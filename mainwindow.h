@@ -68,7 +68,8 @@ protected slots:
     void runNewQuestionWithAnswerTest();
     void runNewAnsweredQuestionTest();
     void onTestCompeted();
-    void runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType);
+    void runNewUrlTest();
+    void runNewQuestionXHelper(NewQuestionTestCase::NewQuestionType questionsType, NewQuestionTestCase::SearchQueryType searchType);
 
 private:
     QWebEngineView *view;

@@ -7,7 +7,7 @@
 #include "jquery.h"
 #include "utils.h"
 
-NewQuestionTestCase::NewQuestionTestCase (QWebEngineView * initView,NewQuestionType initType)
+NewQuestionTestCase::NewQuestionTestCase (QWebEngineView * initView, NewQuestionType initType, SearchQueryType initSearchQueryType)
     : TestCase(),
     view(initView),
     soruQuestionUrl(DEFAULT_SORU_QUESTION_URL),
@@ -15,7 +15,8 @@ NewQuestionTestCase::NewQuestionTestCase (QWebEngineView * initView,NewQuestionT
     currentState(STACKOVERFLOW),
     yandexUrl(DEFAULT_YANDEX_SEARCH_URL),
     currentQuestionIndex (-1),
-    questionsType(initType) {
+    questionsType(initType),
+    searchQueryType(initSearchQueryType) {
 
     connect(view, SIGNAL(loadFinished(bool)), SLOT(finishLoading(bool)));
 }
@@ -30,7 +31,8 @@ NewQuestionTestCase::NewQuestionTestCase (NewQuestionTestCase const & other)
     currentState(other.currentState),
     yandexUrl(other.yandexUrl),
     currentQuestionIndex (other.currentQuestionIndex),
-    questionsType(other.questionsType) {
+    questionsType(other.questionsType),
+    searchQueryType(other.searchQueryType) {
 }
 
 NewQuestionTestCase& NewQuestionTestCase::operator=(NewQuestionTestCase const & other)  {
@@ -45,6 +47,8 @@ NewQuestionTestCase& NewQuestionTestCase::operator=(NewQuestionTestCase const & 
     yandexUrl = other.yandexUrl;
     currentQuestionIndex = other.currentQuestionIndex;
     questionsType = other.questionsType;
+    searchQueryType = other.searchQueryType;
+
     return *this;
 }
 
@@ -68,14 +72,29 @@ bool NewQuestionTestCase::Cancel() {
 QString NewQuestionTestCase::DumpResults() {
     QString dump;
     for (int index = 0; index < questionsToSerch.length(); ++ index) {
-        Question & q = questionsToSerch[index];
-        dump += QString("Exist in Yandex: ")
+        dump += getDumpString(index);
+    }
+    return dump;
+}
+
+QString NewQuestionTestCase::getDumpString(int questionIndex) {
+    Question & q = questionsToSerch[questionIndex];
+    switch (searchQueryType) {
+    case TITLE:
+        return QString("Exist in Yandex: ")
              + QString(q.ExistOnFirstPage ? "yes" : "no")
              + QString(", title: ")
              + q.Text
              + QString("\n");
+    case URL:
+        return QString("Exist in Yandex: ")
+             + QString(q.ExistOnFirstPage ? "yes" : "no")
+             + QString(", url: ")
+             + q.UnquoteLink()
+             + QString("\n");
+    default:
+        throw std::invalid_argument("Invalid question index for dump");
     }
-    return dump;
 }
 
 void NewQuestionTestCase::finishLoading(bool) {
@@ -134,7 +153,7 @@ QUrl NewQuestionTestCase::onResultFoundYandex(const QVariant& returnValue) {
         return QUrl();
     }
 
-    return QUrl(yandexUrl + question().Query());
+    return QUrl(yandexQueryUrl());
 }
 
 QUrl NewQuestionTestCase::onResultFoundStackOverflow(const QVariant& returnValue) {
@@ -148,6 +167,7 @@ QUrl NewQuestionTestCase::onResultFoundStackOverflow(const QVariant& returnValue
     }
 
     ++currentSORUQuestionPageIndex;
+
     if (questionsToSerch.length() >= QUESTION_TO_SEARCH_LIMIT) {
         currentState = YANDEX;
         return QUrl();
@@ -158,10 +178,11 @@ QUrl NewQuestionTestCase::onResultFoundStackOverflow(const QVariant& returnValue
 
 NewQuestionTestCase::Question &NewQuestionTestCase::question() {
     if (currentQuestionIndex < 0 || currentQuestionIndex > questionsToSerch.count()) {
-        throw std::invalid_argument("Invalid question index");
+        throw std::invalid_argument(QString("Invalid question index: " + QString::number(currentQuestionIndex)).toStdString());
     }
     return questionsToSerch[currentQuestionIndex];
 }
+
 QString NewQuestionTestCase::jsCode() {
     switch(questionsType) {
     case ANY:
@@ -175,5 +196,16 @@ QString NewQuestionTestCase::jsCode() {
         break;
     default:
        throw std::invalid_argument("Invalid question type for js code");
+    }
+}
+
+QString NewQuestionTestCase::yandexQueryUrl() {
+    switch (searchQueryType) {
+    case TITLE:
+        return yandexUrl + question().Query();
+    case URL:
+        return yandexUrl + QUrl::toPercentEncoding(QString("url:") + DEFAULT_BASE_URL + question().UnquoteLink());
+    default:
+        throw std::invalid_argument("Invalid yandex query type");
     }
 }

@@ -17,6 +17,7 @@ InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg)) {
 }
 
 const QString DEFAULT_YANDEX_SEARCH_URL = "https://yandex.ru/search/?lr=2&text=";
+const QString DEFAULT_BASE_URL = "http://ru.stackoverflow.com";
 const QString FIND_SORU_IN_YA_JS = " \
         function findUrl(){ \
             var search_url = 'ru.stackoverflow.com'; \
