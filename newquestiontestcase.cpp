@@ -90,7 +90,7 @@ QString NewQuestionTestCase::getDumpString(int questionIndex) {
         return QString("Exist in Yandex: ")
              + QString(q.ExistOnFirstPage ? "yes" : "no")
              + QString(", url: ")
-             + q.UnquoteLink()
+             + DEFAULT_BASE_URL + q.UnquoteLink()
              + QString("\n");
     default:
         throw std::invalid_argument("Invalid question index for dump");
