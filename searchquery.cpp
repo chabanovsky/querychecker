@@ -43,4 +43,10 @@ int SearchQuery::MaxPageNum() {
     return MAX_PAGE_NUM;
 }
 
+void SearchQuery::SetExtraStr(QString extra) {
+    extraStr = extra;
+}
 
+QString SearchQuery::ExtraStr() {
+    return extraStr;
+}

@@ -124,6 +124,11 @@ void NewQuestionTestCase::onResultFoundCallback(const QVariant& returnValue) {
         break;
     case YANDEX:
         url = onResultFoundYandex(returnValue);
+        // Sometimes Yandex handles us a bot.
+        // Actually, we need to hande such situation in JS code,
+        // and if Yandex finds us, allow user to input the captcha
+        // or parse it automatically.
+        //QThread::sleep(5);
         break;
     default:
        throw std::invalid_argument("Invalid state was found on callback");
@@ -204,7 +209,7 @@ QString NewQuestionTestCase::yandexQueryUrl() {
     case TITLE:
         return yandexUrl + question().Query();
     case URL:
-        return yandexUrl + QUrl::toPercentEncoding(QString("url:") + DEFAULT_BASE_URL + question().UnquoteLink());
+        return yandexUrl + QUrl::toPercentEncoding(QString("site:") + DEFAULT_BASE_URL + question().UnquoteLink());
     default:
         throw std::invalid_argument("Invalid yandex query type");
     }

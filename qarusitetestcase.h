@@ -1,5 +1,5 @@
-#ifndef SEARCHQUERYTESTCASE
-#define SEARCHQUERYTESTCASE
+#ifndef QARUSITETESTCASE_H
+#define QARUSITETESTCASE_H
 
 #include <QList>
 #include <QtWidgets>
@@ -12,16 +12,16 @@ class QWebEngineView;
 QT_END_NAMESPACE
 
 #include "testcase.h"
-#include "parser.h"
+#include "tsv_parser.h"
 #include "utils.h"
 
-class SearchQueryTestCase : public QObject, public TestCase {
+class QaruSiteTestCase : public QObject, public TestCase {
     Q_OBJECT
 public:
-    SearchQueryTestCase(QWebEngineView * initView);
-    virtual ~SearchQueryTestCase();
-    SearchQueryTestCase(SearchQueryTestCase const &);
-    SearchQueryTestCase&operator=(SearchQueryTestCase const &);
+    QaruSiteTestCase (QWebEngineView * initView);
+    virtual ~QaruSiteTestCase ();
+    QaruSiteTestCase (QaruSiteTestCase  const &);
+    QaruSiteTestCase & operator=(QaruSiteTestCase  const &);
 
 public:
     virtual void Execute();
@@ -49,5 +49,5 @@ private:
     QList<SearchQuery> searchQueries;
 };
 
-#endif // SEARCHQUERYTESTCASE
 
+#endif // QARUSITETESTCASE_H

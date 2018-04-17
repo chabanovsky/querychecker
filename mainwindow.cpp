@@ -45,6 +45,7 @@
 #include "utils.h"
 #include "searchquerytestcase.h"
 #include "newquestiontestcase.h"
+#include "qarusitetestcase.h"
 
 MainWindow::MainWindow() {
     progress = 0;
@@ -66,6 +67,7 @@ MainWindow::MainWindow() {
     toolBar->addAction(tr("Run NQWA"), this, SLOT(runNewQuestionWithAnswerTest()));
     toolBar->addAction(tr("Run NAQ"), this, SLOT(runNewAnsweredQuestionTest()));
     toolBar->addAction(tr("Run NURLs"), this, SLOT(runNewUrlTest()));
+    toolBar->addAction(tr("Run QARU"), this, SLOT(runQaruSiteTest()));
     toolBar->addWidget(locationEdit);
     setCentralWidget(view);
 }
@@ -116,6 +118,15 @@ void MainWindow::runSearchQueryTest() {
     if (testCase)
         return;
     SearchQueryTestCase * tcase = new SearchQueryTestCase(view);
+    connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
+    testCase = tcase;
+    testCase->Execute();
+}
+
+void MainWindow::runQaruSiteTest() {
+    if (testCase)
+        return;
+    QaruSiteTestCase * tcase = new QaruSiteTestCase(view);
     connect(tcase, SIGNAL(TestSuiteFinished()), SLOT(onTestCompeted()));
     testCase = tcase;
     testCase->Execute();

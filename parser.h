@@ -9,12 +9,12 @@
 class Parser {
 public:
     Parser(const QString & name);
-    QList<SearchQuery> Parse();
+    virtual QList<SearchQuery> Parse();
 
-private:
+protected:
     void readFile();
 
-private:
+protected:
     const QString filename;
     QString content;
 };

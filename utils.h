@@ -17,6 +17,7 @@ InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg)) {
 }
 
 const QString DEFAULT_YANDEX_SEARCH_URL = "https://yandex.ru/search/?lr=2&text=";
+const QString DEFAULT_GOOGLE_SEARCH_URL = "https://www.google.ru/search?q=";
 const QString DEFAULT_BASE_URL = "http://ru.stackoverflow.com";
 const QString FIND_SORU_IN_YA_JS = " \
         function findUrl(){ \
@@ -34,6 +35,22 @@ const QString FIND_SORU_IN_YA_JS = " \
                 } \
                 return -1; \
             } \
+        }; findUrl();";
+const QString FIND_QARU_GOOGLE_JS = " \
+        function findUrl(){ \
+            var search_url = 'qaru.site'; \
+            var results = document.getElementsByClassName('r') ; \
+            for (var index = 0; index < results.length; index++) { \
+                var item = results[index]; \
+                var link = item.getElementsByTagName('a')[0]; \
+                if (link == undefined) { \
+                    continue; \
+                } \
+                if (link.hostname.includes(search_url)) { \
+                    return link.href; \
+                } \
+            } \
+            return ''; \
         }; findUrl();";
 const QString DEFAULT_SORU_QUESTION_URL = "http://ru.stackoverflow.com/questions?sort=newest";
 const QString QUESTION_LIST_JS = " \

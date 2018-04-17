@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>jquery.min.js</file>
         <file>stats.json</file>
+        <file>output.json</file>
     </qresource>
 </RCC>

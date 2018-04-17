@@ -64,6 +64,7 @@ protected slots:
 
     void viewSource();
     void runSearchQueryTest();
+    void runQaruSiteTest();
     void runNewQuestionTest();
     void runNewQuestionWithAnswerTest();
     void runNewAnsweredQuestionTest();

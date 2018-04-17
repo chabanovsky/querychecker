@@ -9,7 +9,9 @@ HEADERS =   mainwindow.h \
     searchquerytestcase.h \
     utils.h \
     jquery.h \
-    newquestiontestcase.h
+    newquestiontestcase.h \
+    qarusitetestcase.h \
+    tsv_parser.h
 SOURCES =   main.cpp \
             mainwindow.cpp \
     searchquery.cpp \
@@ -17,7 +19,9 @@ SOURCES =   main.cpp \
     testcase.cpp \
     searchquerytestcase.cpp \
     jquery.cpp \
-    newquestiontestcase.cpp
+    newquestiontestcase.cpp \
+    qarusitetestcase.cpp \
+    tsv_parser.cpp
 RESOURCES = jquery.qrc
 
 # install

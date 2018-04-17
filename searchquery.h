@@ -13,6 +13,8 @@ public:
     QString Query();
     QString EncodingQuery();
     void SetYandexRank(int rank);
+    QString ExtraStr();
+    void SetExtraStr(QString);
 
 public:
     static void SetMaxPageNum(int maxPageNum);
@@ -20,6 +22,8 @@ public:
 
 private:
     QString query;
+    QString extraStr;
+    int extraInt;
     int googleRank;
     int yandexRank;
 
